@@ -14,7 +14,7 @@ public class SystemValuesTest {
     public void setup() {}
 
     @Test
-    public void testGetScreenSizeHeightReturnsCorrectValue() {
+    public void testGetResolutionHightReturnsCorrectValue() {
         Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
 
         double expected = screenSize.getHeight();
@@ -22,4 +22,15 @@ public class SystemValuesTest {
 
         assertEquals(expected, actual, ERROR_MARGIN);
     }
+
+    @Test
+    public void testGetResolutionWidthReturnsCorrectValue() {
+        Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
+
+        double expected = screenSize.getWidth();
+        double actual = SystemValues.getInstance().getScreenSizeWidth();
+
+        assertEquals(expected, actual, ERROR_MARGIN);
+    }
+    
 }
