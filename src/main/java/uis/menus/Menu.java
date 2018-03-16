@@ -16,7 +16,6 @@ abstract public class Menu {
     abstract void render();
 
     protected void setupFrame() {
-        getJFrame().setContentPane(jPanel);
         getJFrame().setBounds(0, 0, getSystemResolutionWidth(), getSystemResolutionHeight());
         getJFrame().setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         getJFrame().setLayout(null);
