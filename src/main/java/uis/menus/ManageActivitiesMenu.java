@@ -22,11 +22,11 @@ public class ManageActivitiesMenu extends Menu {
     }
 
     @Override
-    void render() {
+    public void render() {
         setPanelInFrame();
-        addButton(manageTeamsButton, BUTTON_POS_X, BUTTON_POS_Y + BUTTON_DISTANCE*1);
-        addButton(manageMembersButton, BUTTON_POS_X, BUTTON_POS_Y + BUTTON_DISTANCE*2);
-        addButton(backButton, BUTTON_POS_X, BUTTON_POS_Y + BUTTON_DISTANCE*3);
+        addButton(manageTeamsButton, BUTTON_POS_X, BUTTON_POS_Y + BUTTON_DISTANCE*0);
+        addButton(manageMembersButton, BUTTON_POS_X, BUTTON_POS_Y + BUTTON_DISTANCE*1);
+        addButton(backButton, BUTTON_POS_X, BUTTON_POS_Y + BUTTON_DISTANCE*2);
     }
 
     private void setPanelInFrame() {

@@ -13,7 +13,7 @@ abstract public class Menu {
         this.jFrame = jFrame;
     }
 
-    abstract void render();
+    abstract public void render();
 
     protected void setupFrame() {
         getJFrame().setBounds(0, 0, getSystemResolutionWidth(), getSystemResolutionHeight());
