@@ -1,4 +1,5 @@
 import uis.menus.MainMenu;
+import utils.Constants;
 import utils.SystemValues;
 
 import javax.swing.*;
@@ -6,9 +7,11 @@ import java.awt.*;
 
 public class App {
 
+    private static JFrame jFrame = new JFrame(Constants.LABEL);
+
     public static void main(String[] args) {
-        MainMenu menu = new MainMenu();
-        menu.renderMenu();
+        MainMenu menu = new MainMenu(jFrame);
+        menu.render();
 //        System.out.println("Hello World!");
 //        JFrame jFrame = new JFrame("Αυτοδιαχειριζόμενο γυμναστήριο");
 //        jFrame.setBounds(0, 0, getSystemResolutionWidth(), getSystemResolutionHeight());
