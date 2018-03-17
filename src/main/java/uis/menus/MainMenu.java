@@ -19,10 +19,10 @@ public class MainMenu extends Menu {
 
     public MainMenu(JFrame jFrame) {
         super(jFrame);
-        initializeButtonListener();
+        initializeButtonListeners();
     }
 
-    private void initializeButtonListener() {
+    private void initializeButtonListeners() {
         ButtonListener listener = new ButtonListener();
         manageActivitiesButton.addActionListener(listener);
     }
@@ -37,10 +37,9 @@ public class MainMenu extends Menu {
         setupFrame();
     }
 
-    private JButton addButton(JButton button, int buttonPosX, int buttonPosY) {
+    private void addButton(JButton button, int buttonPosX, int buttonPosY) {
         button.setBounds(buttonPosX, buttonPosY, BUTTON_WIDTH, BUTTON_HEIGHT);
         getJPanel().add(button);
-        return button;
     }
 
     private class ButtonListener implements ActionListener {

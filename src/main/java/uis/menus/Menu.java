@@ -6,8 +6,8 @@ import javax.swing.*;
 
 abstract public class Menu {
 
-    protected JFrame jFrame;
-    protected JPanel jPanel = new JPanel();
+    private JFrame jFrame;
+    private JPanel jPanel = new JPanel();
 
     public Menu(JFrame jFrame) {
         this.jFrame = jFrame;
@@ -18,6 +18,7 @@ abstract public class Menu {
     protected void setupFrame() {
         getJFrame().setBounds(0, 0, getSystemResolutionWidth(), getSystemResolutionHeight());
         getJFrame().setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        getJFrame().setResizable(false);
         getJFrame().setLayout(null);
         getJFrame().setVisible(true);
     }
