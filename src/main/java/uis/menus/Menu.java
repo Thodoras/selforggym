@@ -15,14 +15,6 @@ abstract public class Menu {
 
     abstract public void render();
 
-    protected void setupFrame() {
-        getJFrame().setBounds(0, 0, getSystemResolutionWidth(), getSystemResolutionHeight());
-        getJFrame().setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        getJFrame().setResizable(false);
-        getJFrame().setLayout(null);
-        getJFrame().setVisible(true);
-    }
-
     protected static int getSystemResolutionWidth() {
         return (int) SystemValues.getInstance().getScreenSizeWidth();
     }

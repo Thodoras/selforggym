@@ -42,6 +42,14 @@ public class MainMenu extends Menu {
         getJPanel().add(button);
     }
 
+    private void setupFrame() {
+        getJFrame().setBounds(0, 0, getSystemResolutionWidth(), getSystemResolutionHeight());
+        getJFrame().setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        getJFrame().setResizable(false);
+        getJFrame().setLayout(null);
+        getJFrame().setVisible(true);
+    }
+
     private class ButtonListener implements ActionListener {
 
         @Override

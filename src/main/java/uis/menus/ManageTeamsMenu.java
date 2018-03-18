@@ -1,6 +1,8 @@
 package uis.menus;
 
 import javax.swing.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
 public class ManageTeamsMenu extends Menu {
 
@@ -24,6 +26,12 @@ public class ManageTeamsMenu extends Menu {
 
     public ManageTeamsMenu(JFrame jFrame, JPanel jPanel) {
         super(jFrame);
+        initializeButtonListeners();
+    }
+
+    private void initializeButtonListeners() {
+        ButtonListener listener = new ButtonListener();
+        addButton.addActionListener(listener);
     }
 
     @Override
@@ -56,5 +64,16 @@ public class ManageTeamsMenu extends Menu {
 //        jScrollPane = new JScrollPane(jList, JScrollPane.VERTICAL_SCROLLBAR_ALWAYS, JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
 //        jScrollPane.setBounds(POS_X, POS_Y + VERTICAL_DISTANCE, LIST_WIDTH, LIST_HEIGHT);
         getJPanel().add(jList);
+    }
+
+    private class ButtonListener implements ActionListener {
+
+        @Override
+        public void actionPerformed(ActionEvent actionEvent) {
+            if (actionEvent.getSource() == addButton) {
+                TeamForm menu = new TeamForm(getJFrame());
+                menu.render();
+            }
+        }
     }
 }
