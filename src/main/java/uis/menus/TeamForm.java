@@ -1,5 +1,8 @@
 package uis.menus;
 
+import controllers.TeamController;
+import dtos.TeamDto;
+
 import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -23,13 +26,16 @@ public class TeamForm extends Menu {
     private JTextField teamActivityField = new JTextField();
     private JButton submitButton = new JButton("Submit");
 
+    private TeamController teamController = new TeamController();
+
     public TeamForm(JFrame jFrame) {
         super(jFrame);
         initializeButtonListeners();
     }
 
     private void initializeButtonListeners() {
-
+        ButtonListener listener = new ButtonListener();
+        submitButton.addActionListener(listener);
     }
 
     @Override
@@ -65,6 +71,19 @@ public class TeamForm extends Menu {
     private void addButton(JButton button, int buttonPosX, int buttonPosY) {
         button.setBounds(buttonPosX, buttonPosY, BUTTON_WIDTH, BUTTON_HEIGHT);
         getJPanel().add(button);
+    }
+
+    private class ButtonListener implements ActionListener {
+
+        @Override
+        public void actionPerformed(ActionEvent actionEvent) {
+            if (actionEvent.getSource() == submitButton) {
+                TeamDto teamDto = new TeamDto();
+                teamDto.setTeamName(teamNameField.getText());
+                teamDto.setTeamActivity(teamActivityField.getText());
+                teamController.addTeam(teamDto);
+            }
+        }
     }
 
 }
