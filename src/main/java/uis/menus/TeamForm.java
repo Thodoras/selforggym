@@ -2,6 +2,9 @@ package uis.menus;
 
 import controllers.TeamController;
 import dtos.TeamDto;
+import utils.Constants;
+import utils.exceptions.InvalidInputException;
+import utils.exceptions.MissingFieldException;
 
 import javax.swing.*;
 import java.awt.event.ActionEvent;
@@ -9,16 +12,17 @@ import java.awt.event.ActionListener;
 
 public class TeamForm extends Menu {
 
-    private static int POS_X = getSystemResolutionWidth() / 6;
-    private static int POS_Y = getSystemResolutionHeight() / 12;
-    private static int BUTTON_WIDTH = getSystemResolutionWidth() / 6;
-    private static int BUTTON_HEIGHT = getSystemResolutionHeight() / 12;
-    private static int LABEL_WIDTH = getSystemResolutionWidth() / 6;
-    private static int LABEL_HEIGHT = getSystemResolutionHeight() / 24;
-    private static int FIELD_WIDTH = 3*getSystemResolutionWidth() / 6;
-    private static int FIELD_HEIGHT = getSystemResolutionHeight() / 24;
-    private static int ROW_HOR_DISTANCE = getSystemResolutionWidth() / 6;
-    private static int ROW_VER_DISTANCE = getSystemResolutionHeight() / 24;
+    private static final TeamForm INSTANCE = new TeamForm();
+    private static final int POS_X = getSystemResolutionWidth() / 6;
+    private static final int POS_Y = getSystemResolutionHeight() / 12;
+    private static final int BUTTON_WIDTH = getSystemResolutionWidth() / 6;
+    private static final int BUTTON_HEIGHT = getSystemResolutionHeight() / 12;
+    private static final int LABEL_WIDTH = getSystemResolutionWidth() / 6;
+    private static final int LABEL_HEIGHT = getSystemResolutionHeight() / 24;
+    private static final int FIELD_WIDTH = 3*getSystemResolutionWidth() / 6;
+    private static final int FIELD_HEIGHT = getSystemResolutionHeight() / 24;
+    private static final int ROW_HOR_DISTANCE = getSystemResolutionWidth() / 6;
+    private static final int ROW_VER_DISTANCE = getSystemResolutionHeight() / 24;
 
     private JLabel teamNameLabel = new JLabel("Team Name:");
     private JLabel teamActivityLabel = new JLabel("Team Activity:");
@@ -26,11 +30,14 @@ public class TeamForm extends Menu {
     private JTextField teamActivityField = new JTextField();
     private JButton submitButton = new JButton("Submit");
 
-    private TeamController teamController = new TeamController();
+    private TeamController teamController = TeamController.getInstance();
 
-    public TeamForm(JFrame jFrame) {
-        super(jFrame);
+    private TeamForm() {
         initializeButtonListeners();
+    }
+
+    public static TeamForm getInstance() {
+        return INSTANCE;
     }
 
     private void initializeButtonListeners() {
@@ -40,17 +47,22 @@ public class TeamForm extends Menu {
 
     @Override
     public void render() {
+        populatePanelIfNeeded();
         setPanelInFrame();
-        addRow(teamNameLabel, teamNameField, POS_X, POS_Y + 2*ROW_VER_DISTANCE);
-        addRow(teamActivityLabel, teamActivityField, POS_X, POS_Y + 3*ROW_VER_DISTANCE);
-        addButton(submitButton, POS_X + 3*ROW_HOR_DISTANCE, POS_Y + 16*ROW_VER_DISTANCE);
+
+    }
+
+    private void populatePanelIfNeeded() {
+        if (getJPanel().getComponents().length == 0) {
+            addRow(teamNameLabel, teamNameField, POS_X, POS_Y + 2*ROW_VER_DISTANCE);
+            addRow(teamActivityLabel, teamActivityField, POS_X, POS_Y + 3*ROW_VER_DISTANCE);
+            addButton(submitButton, POS_X + 3*ROW_HOR_DISTANCE, POS_Y + 16*ROW_VER_DISTANCE);
+        }
     }
 
     private void setPanelInFrame() {
         getJFrame().setContentPane(getJPanel());
-        // Swing magic below
-        getJFrame().invalidate();
-        getJFrame().validate();
+        getJFrame().revalidate();
     }
 
     private void addRow(JLabel jLabel, JTextField jTextField, int posX , int posY) {
@@ -78,11 +90,31 @@ public class TeamForm extends Menu {
         @Override
         public void actionPerformed(ActionEvent actionEvent) {
             if (actionEvent.getSource() == submitButton) {
-                TeamDto teamDto = new TeamDto();
-                teamDto.setTeamName(teamNameField.getText());
-                teamDto.setTeamActivity(teamActivityField.getText());
-                teamController.addTeam(teamDto);
+                submitAction();
             }
+        }
+
+        private void submitAction() {
+            TeamDto teamDto = new TeamDto();
+            teamDto.setTeamName(teamNameField.getText());
+            teamDto.setTeamActivity(teamActivityField.getText());
+            ManageTeamsMenu.getInstance().render();
+            try {
+                teamController.addTeam(teamDto);
+            } catch (MissingFieldException e) {
+                errorMessage(e.getMessage());
+            } catch (InvalidInputException e) {
+                errorMessage(e.getMessage());
+            } catch (Exception e) {
+                errorMessage(Constants.GENERIC_ERROR_MESSAGE);
+            }
+        }
+
+        private void errorMessage(String message) {
+            JOptionPane.showMessageDialog(getJFrame()
+                    , message
+                    , "Error"
+                    , JOptionPane.WARNING_MESSAGE);
         }
     }
 

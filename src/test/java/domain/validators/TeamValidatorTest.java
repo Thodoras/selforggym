@@ -1,4 +1,4 @@
-package validators;
+package domain.validators;
 
 import dtos.TeamDto;
 import org.junit.Test;
@@ -12,14 +12,15 @@ import static org.mockito.Mockito.when;
 
 public class TeamValidatorTest {
 
+    private TeamValidator teamValidator = TeamValidator.getInstance();
+
     @Test
     public void testValidateTeamDtoWhenHappyPath() {
         TeamDto teamDto = mock(TeamDto.class);
         when(teamDto.getTeamName()).thenReturn("foo");
         when(teamDto.getTeamActivity()).thenReturn("bar");
-        TeamValidator validator = new TeamValidator(teamDto);
 
-        Throwable throwable = catchThrowable(validator::validateTeamDto);
+        Throwable throwable = catchThrowable(()->teamValidator.validateTeamDto(teamDto));
 
         assertThat(throwable).isNull();
     }
@@ -29,9 +30,8 @@ public class TeamValidatorTest {
         TeamDto teamDto = mock(TeamDto.class);
         when(teamDto.getTeamName()).thenReturn(null);
         when(teamDto.getTeamActivity()).thenReturn("bar");
-        TeamValidator validator = new TeamValidator(teamDto);
 
-        Throwable throwable = catchThrowable(validator::validateTeamDto);
+        Throwable throwable = catchThrowable(()->teamValidator.validateTeamDto(teamDto));
 
         assertThat(throwable)
                 .isInstanceOf(MissingFieldException.class)
@@ -43,9 +43,8 @@ public class TeamValidatorTest {
         TeamDto teamDto = mock(TeamDto.class);
         when(teamDto.getTeamName()).thenReturn("foo");
         when(teamDto.getTeamActivity()).thenReturn(null);
-        TeamValidator validator = new TeamValidator(teamDto);
 
-        Throwable throwable = catchThrowable(validator::validateTeamDto);
+        Throwable throwable = catchThrowable(()->teamValidator.validateTeamDto(teamDto));
 
         assertThat(throwable)
                 .isInstanceOf(MissingFieldException.class)
@@ -57,9 +56,8 @@ public class TeamValidatorTest {
         TeamDto teamDto = mock(TeamDto.class);
         when(teamDto.getTeamName()).thenReturn("1foo");
         when(teamDto.getTeamActivity()).thenReturn("bar");
-        TeamValidator validator = new TeamValidator(teamDto);
 
-        Throwable throwable = catchThrowable(validator::validateTeamDto);
+        Throwable throwable = catchThrowable(()->teamValidator.validateTeamDto(teamDto));
 
         assertThat(throwable)
                 .isInstanceOf(InvalidInputException.class)
@@ -71,9 +69,8 @@ public class TeamValidatorTest {
         TeamDto teamDto = mock(TeamDto.class);
         when(teamDto.getTeamName()).thenReturn("foo");
         when(teamDto.getTeamActivity()).thenReturn("b");
-        TeamValidator validator = new TeamValidator(teamDto);
 
-        Throwable throwable = catchThrowable(validator::validateTeamDto);
+        Throwable throwable = catchThrowable(()->teamValidator.validateTeamDto(teamDto));
 
         assertThat(throwable)
                 .isInstanceOf(InvalidInputException.class)

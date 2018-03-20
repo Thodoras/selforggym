@@ -1,16 +1,18 @@
 package uis.menus;
 
+import utils.Constants;
 import utils.SystemValues;
 
 import javax.swing.*;
 
 abstract public class Menu {
 
-    private JFrame jFrame;
+    private static final JFrame jFrame = new JFrame(Constants.LABEL);
     private JPanel jPanel = new JPanel();
 
-    public Menu(JFrame jFrame) {
-        this.jFrame = jFrame;
+    protected Menu() {
+        setupFrame();
+        jPanel.setLayout(null);
     }
 
     abstract public void render();
@@ -29,5 +31,13 @@ abstract public class Menu {
 
     protected JPanel getJPanel() {
         return jPanel;
+    }
+
+    private void setupFrame() {
+        getJFrame().setBounds(0, 0, getSystemResolutionWidth(), getSystemResolutionHeight());
+        getJFrame().setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        getJFrame().setResizable(false);
+        getJFrame().setLayout(null);
+        getJFrame().setVisible(true);
     }
 }

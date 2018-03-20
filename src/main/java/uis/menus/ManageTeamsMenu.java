@@ -6,14 +6,15 @@ import java.awt.event.ActionListener;
 
 public class ManageTeamsMenu extends Menu {
 
-    private static int POS_X = getSystemResolutionWidth() / 6;
-    private static int POS_Y = getSystemResolutionHeight() / 12;
-    private static int BUTTON_WIDTH = getSystemResolutionWidth() / 6;
-    private static int BUTTON_HEIGHT = getSystemResolutionHeight() / 12;
-    private static int LIST_WIDTH = 3*getSystemResolutionWidth() / 6;
-    private static int LIST_HEIGHT = 8*getSystemResolutionHeight() / 12;
-    private static int HORIZONTAL_DISTANCE = getSystemResolutionWidth() / 6;
-    private static int VERTICAL_DISTANCE = getSystemResolutionHeight() / 12;
+    private static final ManageTeamsMenu INSTANCE = new ManageTeamsMenu();
+    private static final int POS_X = getSystemResolutionWidth() / 6;
+    private static final int POS_Y = getSystemResolutionHeight() / 12;
+    private static final int BUTTON_WIDTH = getSystemResolutionWidth() / 6;
+    private static final int BUTTON_HEIGHT = getSystemResolutionHeight() / 12;
+    private static final int LIST_WIDTH = 3*getSystemResolutionWidth() / 6;
+    private static final int LIST_HEIGHT = 8*getSystemResolutionHeight() / 12;
+    private static final int HORIZONTAL_DISTANCE = getSystemResolutionWidth() / 6;
+    private static final int VERTICAL_DISTANCE = getSystemResolutionHeight() / 12;
 
     private JButton addButton = new JButton("Add");
     private JButton editButton = new JButton("Edit");
@@ -24,9 +25,12 @@ public class ManageTeamsMenu extends Menu {
     private JList<String> jList;
     private JScrollPane jScrollPane;
 
-    public ManageTeamsMenu(JFrame jFrame, JPanel jPanel) {
-        super(jFrame);
+    private ManageTeamsMenu() {
         initializeButtonListeners();
+    }
+
+    public static ManageTeamsMenu getInstance() {
+        return INSTANCE;
     }
 
     private void initializeButtonListeners() {
@@ -36,19 +40,23 @@ public class ManageTeamsMenu extends Menu {
 
     @Override
     public void render() {
+        populatePanelIfNeeded();
         setPanelInFrame();
-        addButton(addButton, POS_X + 3*HORIZONTAL_DISTANCE, POS_Y + 1*VERTICAL_DISTANCE);
-        addButton(editButton, POS_X + 3*HORIZONTAL_DISTANCE, POS_Y + 2*VERTICAL_DISTANCE);
-        addButton(deleteButton, POS_X + 3*HORIZONTAL_DISTANCE, POS_Y + 3*VERTICAL_DISTANCE);
-        addButton(backButton, POS_X + 3*HORIZONTAL_DISTANCE, POS_Y + 4*VERTICAL_DISTANCE);
-        addTable();
+    }
+
+    private void populatePanelIfNeeded() {
+        if (getJPanel().getComponents().length == 0) {
+            addButton(addButton, POS_X + 3*HORIZONTAL_DISTANCE, POS_Y + 1*VERTICAL_DISTANCE);
+            addButton(editButton, POS_X + 3*HORIZONTAL_DISTANCE, POS_Y + 2*VERTICAL_DISTANCE);
+            addButton(deleteButton, POS_X + 3*HORIZONTAL_DISTANCE, POS_Y + 3*VERTICAL_DISTANCE);
+            addButton(backButton, POS_X + 3*HORIZONTAL_DISTANCE, POS_Y + 4*VERTICAL_DISTANCE);
+            addTable();
+        }
     }
 
     private void setPanelInFrame() {
         getJFrame().setContentPane(getJPanel());
-        // Swing magic below
-        getJFrame().invalidate();
-        getJFrame().validate();
+        getJFrame().revalidate();
     }
 
     private void addButton(JButton button, int buttonPosX, int buttonPosY) {
@@ -71,8 +79,7 @@ public class ManageTeamsMenu extends Menu {
         @Override
         public void actionPerformed(ActionEvent actionEvent) {
             if (actionEvent.getSource() == addButton) {
-                TeamForm menu = new TeamForm(getJFrame());
-                menu.render();
+                TeamForm.getInstance().render();
             }
         }
     }

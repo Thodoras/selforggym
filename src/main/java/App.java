@@ -1,17 +1,22 @@
 import uis.menus.MainMenu;
 import utils.Constants;
-import utils.SystemValues;
+import utils.database.Connection;
+import utils.database.Schema;
 
 import javax.swing.*;
-import java.awt.*;
+import java.sql.SQLException;
 
 public class App {
 
-    private static JFrame jFrame = new JFrame(Constants.LABEL);
-
     public static void main(String[] args) {
-        MainMenu menu = new MainMenu(jFrame);
-        menu.render();
+        try {
+            Connection.getInstance().connect();
+            Schema.getInstance().migrate();
+            MainMenu.getInstance().render();
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+        }
+
 //        System.out.println("Hello World!");
 //        JFrame jFrame = new JFrame("Αυτοδιαχειριζόμενο γυμναστήριο");
 //        jFrame.setBounds(0, 0, getSystemResolutionWidth(), getSystemResolutionHeight());

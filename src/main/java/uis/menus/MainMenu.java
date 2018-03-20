@@ -6,20 +6,24 @@ import java.awt.event.ActionListener;
 
 public class MainMenu extends Menu {
 
-    private static int BUTTON_POS_X = getSystemResolutionWidth() / 5;
-    private static int BUTTON_POS_Y = 3 * getSystemResolutionHeight() / 8;
-    private static int BUTTON_WIDTH = 3 * getSystemResolutionWidth() / 5;
-    private static int BUTTON_HEIGHT = getSystemResolutionHeight() / 8;
-    private static int BUTTON_DISTANCE = getSystemResolutionHeight() / 8;
+    private static final MainMenu INSTANCE = new MainMenu();
+    private static final int BUTTON_POS_X = getSystemResolutionWidth() / 5;
+    private static final int BUTTON_POS_Y = 3 * getSystemResolutionHeight() / 8;
+    private static final int BUTTON_WIDTH = 3 * getSystemResolutionWidth() / 5;
+    private static final int BUTTON_HEIGHT = getSystemResolutionHeight() / 8;
+    private static final int BUTTON_DISTANCE = getSystemResolutionHeight() / 8;
 
     private JButton manageActivitiesButton = new JButton("Manage Activities");
     private JButton manageParticipationButton = new JButton("Manage Participation");
     private JButton manageEconomyButton = new JButton("Manage Payments");
     private JButton exitButton = new JButton("Exit");
 
-    public MainMenu(JFrame jFrame) {
-        super(jFrame);
+    private MainMenu() {
         initializeButtonListeners();
+    }
+
+    public static MainMenu getInstance() {
+        return INSTANCE;
     }
 
     private void initializeButtonListeners() {
@@ -29,12 +33,17 @@ public class MainMenu extends Menu {
 
     @Override
     public void render() {
-        getJFrame().setContentPane(getJPanel());
-        addButton(manageActivitiesButton, BUTTON_POS_X, BUTTON_POS_Y + BUTTON_DISTANCE*0);
-        addButton(manageParticipationButton, BUTTON_POS_X, BUTTON_POS_Y + BUTTON_DISTANCE*1);
-        addButton(manageEconomyButton, BUTTON_POS_X, BUTTON_POS_Y + BUTTON_DISTANCE*2);
-        addButton(exitButton, BUTTON_POS_X, BUTTON_POS_Y + BUTTON_DISTANCE*3);
-        setupFrame();
+        populatePanelIfNeeded();
+        setPanelInFrame();
+    }
+
+    private void populatePanelIfNeeded() {
+        if (getJPanel().getComponents().length == 0) {
+            addButton(manageActivitiesButton, BUTTON_POS_X, BUTTON_POS_Y + BUTTON_DISTANCE*0);
+            addButton(manageParticipationButton, BUTTON_POS_X, BUTTON_POS_Y + BUTTON_DISTANCE*1);
+            addButton(manageEconomyButton, BUTTON_POS_X, BUTTON_POS_Y + BUTTON_DISTANCE*2);
+            addButton(exitButton, BUTTON_POS_X, BUTTON_POS_Y + BUTTON_DISTANCE*3);
+        }
     }
 
     private void addButton(JButton button, int buttonPosX, int buttonPosY) {
@@ -42,12 +51,9 @@ public class MainMenu extends Menu {
         getJPanel().add(button);
     }
 
-    private void setupFrame() {
-        getJFrame().setBounds(0, 0, getSystemResolutionWidth(), getSystemResolutionHeight());
-        getJFrame().setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        getJFrame().setResizable(false);
-        getJFrame().setLayout(null);
-        getJFrame().setVisible(true);
+    private void setPanelInFrame() {
+        getJFrame().setContentPane(getJPanel());
+        getJFrame().revalidate();
     }
 
     private class ButtonListener implements ActionListener {
@@ -55,8 +61,7 @@ public class MainMenu extends Menu {
         @Override
         public void actionPerformed(ActionEvent actionEvent) {
             if (actionEvent.getSource() == manageActivitiesButton) {
-                ManageActivitiesMenu menu = new ManageActivitiesMenu(getJFrame(), getJPanel());
-                menu.render();
+                ManageActivitiesMenu.getInstance().render();
             }
         }
     }

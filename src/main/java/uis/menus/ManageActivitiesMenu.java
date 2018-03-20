@@ -6,22 +6,23 @@ import java.awt.event.ActionListener;
 
 public class ManageActivitiesMenu extends Menu {
 
-    private static int BUTTON_POS_X = getSystemResolutionWidth() / 5;
-    private static int BUTTON_POS_Y = 3 * getSystemResolutionHeight() / 8;
-    private static int BUTTON_WIDTH = 3 * getSystemResolutionWidth() / 5;
-    private static int BUTTON_HEIGHT = getSystemResolutionHeight() / 8;
-    private static int BUTTON_DISTANCE = getSystemResolutionHeight() / 8;
+    private static final ManageActivitiesMenu INSTANCE = new ManageActivitiesMenu();
+    private static final int BUTTON_POS_X = getSystemResolutionWidth() / 5;
+    private static final int BUTTON_POS_Y = 3 * getSystemResolutionHeight() / 8;
+    private static final int BUTTON_WIDTH = 3 * getSystemResolutionWidth() / 5;
+    private static final int BUTTON_HEIGHT = getSystemResolutionHeight() / 8;
+    private static final int BUTTON_DISTANCE = getSystemResolutionHeight() / 8;
 
     JButton manageTeamsButton = new JButton("Manage Teams");
     JButton manageMembersButton = new JButton("Manage Members");
     JButton backButton = new JButton("Back");
 
-    private JPanel previousPanel;
-
-    public ManageActivitiesMenu(JFrame jFrame, JPanel previousPanel) {
-        super(jFrame);
-        this.previousPanel = previousPanel;
+    private ManageActivitiesMenu() {
         initializeButtonListeners();
+    }
+
+    public static ManageActivitiesMenu getInstance() {
+        return INSTANCE;
     }
 
     private void initializeButtonListeners() {
@@ -31,17 +32,21 @@ public class ManageActivitiesMenu extends Menu {
 
     @Override
     public void render() {
+        populatePanelIfNeeded();
         setPanelInFrame();
-        addButton(manageTeamsButton, BUTTON_POS_X, BUTTON_POS_Y + BUTTON_DISTANCE*0);
-        addButton(manageMembersButton, BUTTON_POS_X, BUTTON_POS_Y + BUTTON_DISTANCE*1);
-        addButton(backButton, BUTTON_POS_X, BUTTON_POS_Y + BUTTON_DISTANCE*2);
+    }
+
+    private void populatePanelIfNeeded() {
+        if (getJPanel().getComponents().length == 0) {
+            addButton(manageTeamsButton, BUTTON_POS_X, BUTTON_POS_Y + BUTTON_DISTANCE*0);
+            addButton(manageMembersButton, BUTTON_POS_X, BUTTON_POS_Y + BUTTON_DISTANCE*1);
+            addButton(backButton, BUTTON_POS_X, BUTTON_POS_Y + BUTTON_DISTANCE*2);
+        }
     }
 
     private void setPanelInFrame() {
         getJFrame().setContentPane(getJPanel());
-        // Swing magic below
-        getJFrame().invalidate();
-        getJFrame().validate();
+        getJFrame().revalidate();
     }
 
     private void addButton(JButton button, int buttonPosX, int buttonPosY) {
@@ -54,8 +59,7 @@ public class ManageActivitiesMenu extends Menu {
         @Override
         public void actionPerformed(ActionEvent actionEvent) {
             if (actionEvent.getSource() == manageTeamsButton) {
-                ManageTeamsMenu menu = new ManageTeamsMenu(getJFrame(), getJPanel());
-                menu.render();
+                ManageTeamsMenu.getInstance().render();
             }
         }
     }
