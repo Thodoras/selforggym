@@ -54,8 +54,14 @@ public class TeamForm extends Menu {
 
     }
 
+    public void render(String title) {
+        getTitle().setText(title);
+        render();
+    }
+
     private void populatePanelIfNeeded() {
         if (getJPanel().getComponents().length == 0) {
+            addTitle(getTitle().getText());
             addRow(teamNameLabel, teamNameField, POS_X, POS_Y + 2*ROW_VER_DISTANCE);
             addRow(teamActivityLabel, teamActivityField, POS_X, POS_Y + 3*ROW_VER_DISTANCE);
             addButton(submitButton, POS_X + 2*ROW_HOR_DISTANCE, POS_Y + 16*ROW_VER_DISTANCE);

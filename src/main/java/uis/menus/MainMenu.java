@@ -7,6 +7,7 @@ import java.awt.event.ActionListener;
 public class MainMenu extends Menu {
 
     private static final MainMenu INSTANCE = new MainMenu();
+    private static final String TITLE = "Main Menu";
     private static final int BUTTON_POS_X = getSystemResolutionWidth() / 5;
     private static final int BUTTON_POS_Y = 3 * getSystemResolutionHeight() / 8;
     private static final int BUTTON_WIDTH = 3 * getSystemResolutionWidth() / 5;
@@ -39,6 +40,7 @@ public class MainMenu extends Menu {
 
     private void populatePanelIfNeeded() {
         if (getJPanel().getComponents().length == 0) {
+            addTitle(TITLE);
             addButton(manageActivitiesButton, BUTTON_POS_X, BUTTON_POS_Y + BUTTON_DISTANCE*0);
             addButton(manageParticipationButton, BUTTON_POS_X, BUTTON_POS_Y + BUTTON_DISTANCE*1);
             addButton(manageEconomyButton, BUTTON_POS_X, BUTTON_POS_Y + BUTTON_DISTANCE*2);

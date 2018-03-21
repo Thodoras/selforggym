@@ -7,6 +7,9 @@ import java.awt.event.ActionListener;
 public class ManageTeamsMenu extends Menu {
 
     private static final ManageTeamsMenu INSTANCE = new ManageTeamsMenu();
+    private static final String TITLE = "Manage Teams Menu";
+    private static final String ADD_TEAM_TITLE = "Add Team";
+    private static final String EDIT_TEAM_TITLE = "Edit Team";
     private static final int POS_X = getSystemResolutionWidth() / 6;
     private static final int POS_Y = getSystemResolutionHeight() / 12;
     private static final int BUTTON_WIDTH = getSystemResolutionWidth() / 6;
@@ -46,6 +49,7 @@ public class ManageTeamsMenu extends Menu {
 
     private void populatePanelIfNeeded() {
         if (getJPanel().getComponents().length == 0) {
+            addTitle(TITLE);
             addButton(addButton, POS_X + 3*HORIZONTAL_DISTANCE, POS_Y + 1*VERTICAL_DISTANCE);
             addButton(editButton, POS_X + 3*HORIZONTAL_DISTANCE, POS_Y + 2*VERTICAL_DISTANCE);
             addButton(deleteButton, POS_X + 3*HORIZONTAL_DISTANCE, POS_Y + 3*VERTICAL_DISTANCE);
@@ -79,7 +83,7 @@ public class ManageTeamsMenu extends Menu {
         @Override
         public void actionPerformed(ActionEvent actionEvent) {
             if (actionEvent.getSource() == addButton) {
-                TeamForm.getInstance().render();
+                TeamForm.getInstance().render(ADD_TEAM_TITLE);
             }
         }
     }
