@@ -4,6 +4,8 @@ import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
+import static java.lang.Thread.sleep;
+
 public class ManageTeamsMenu extends Menu {
 
     private static final ManageTeamsMenu INSTANCE = new ManageTeamsMenu();
@@ -18,7 +20,10 @@ public class ManageTeamsMenu extends Menu {
     private static final int LIST_HEIGHT = 8*getSystemResolutionHeight() / 12;
     private static final int HORIZONTAL_DISTANCE = getSystemResolutionWidth() / 6;
     private static final int VERTICAL_DISTANCE = getSystemResolutionHeight() / 12;
+    private static final int MESSAGE_LABEL_WIDTH = getSystemResolutionWidth() / 6;
+    private static final int MESSAGE_LABEL_HEIGHT = 2*getSystemResolutionHeight() / 24;
 
+    private JLabel messageLabel = new JLabel();
     private JButton addButton = new JButton("Add");
     private JButton editButton = new JButton("Edit");
     private JButton deleteButton = new JButton("Delete");
@@ -45,6 +50,19 @@ public class ManageTeamsMenu extends Menu {
     public void render() {
         populatePanelIfNeeded();
         setPanelInFrame();
+    }
+
+    public void render(String message) {
+        messageLabel.setText(message);
+        messageLabel.setHorizontalAlignment(SwingConstants.CENTER);
+        messageLabel.setVerticalAlignment(SwingConstants.CENTER);
+        addMessage();
+        render();
+    }
+
+    private void addMessage() {
+        messageLabel.setBounds(getSystemResolutionWidth()/2 - MESSAGE_LABEL_WIDTH/2, MESSAGE_LABEL_HEIGHT, TITLE_WIDTH, TITLE_HEIGHT);
+        getJPanel().add(messageLabel);
     }
 
     private void populatePanelIfNeeded() {
