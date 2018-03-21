@@ -29,6 +29,7 @@ public class TeamForm extends Menu {
     private JTextField teamNameField = new JTextField();
     private JTextField teamActivityField = new JTextField();
     private JButton submitButton = new JButton("Submit");
+    private JButton cancelButton = new JButton("Cancel");
 
     private TeamController teamController = TeamController.getInstance();
 
@@ -43,6 +44,7 @@ public class TeamForm extends Menu {
     private void initializeButtonListeners() {
         ButtonListener listener = new ButtonListener();
         submitButton.addActionListener(listener);
+        cancelButton.addActionListener(listener);
     }
 
     @Override
@@ -56,7 +58,8 @@ public class TeamForm extends Menu {
         if (getJPanel().getComponents().length == 0) {
             addRow(teamNameLabel, teamNameField, POS_X, POS_Y + 2*ROW_VER_DISTANCE);
             addRow(teamActivityLabel, teamActivityField, POS_X, POS_Y + 3*ROW_VER_DISTANCE);
-            addButton(submitButton, POS_X + 3*ROW_HOR_DISTANCE, POS_Y + 16*ROW_VER_DISTANCE);
+            addButton(submitButton, POS_X + 2*ROW_HOR_DISTANCE, POS_Y + 16*ROW_VER_DISTANCE);
+            addButton(cancelButton, POS_X + 3*ROW_HOR_DISTANCE, POS_Y + 16*ROW_VER_DISTANCE);
         }
     }
 
@@ -91,6 +94,8 @@ public class TeamForm extends Menu {
         public void actionPerformed(ActionEvent actionEvent) {
             if (actionEvent.getSource() == submitButton) {
                 submitAction();
+            } else if (actionEvent.getSource() == cancelButton) {
+                ManageTeamsMenu.getInstance().render();
             }
         }
 
