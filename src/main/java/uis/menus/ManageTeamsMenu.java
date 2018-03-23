@@ -4,6 +4,7 @@ import controllers.TeamController;
 import dtos.TeamDto;
 
 import javax.swing.*;
+import javax.swing.table.DefaultTableModel;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.sql.SQLException;
@@ -33,9 +34,8 @@ public class ManageTeamsMenu extends Menu {
     private JButton editButton = new JButton("Edit");
     private JButton deleteButton = new JButton("Delete");
     private JButton backButton = new JButton("Back");
-
-    private DefaultListModel<String> defaultListModel = new DefaultListModel<>();
-    private JList<String> jList;
+    private DefaultTableModel defaultTableModel = new DefaultTableModel(new Object[][]{}, new Object[]{"Team Name", "Activity"});
+    private JTable jTable;
     private JScrollPane jScrollPane;
     private TeamController teamController = TeamController.getInstance();
 
@@ -94,18 +94,22 @@ public class ManageTeamsMenu extends Menu {
     }
 
     private void addTable() {
-        jList = new JList<>(defaultListModel);
-        jList.setBounds(POS_X, POS_Y + VERTICAL_DISTANCE, LIST_WIDTH, LIST_HEIGHT);
-//        jScrollPane = new JScrollPane(jList, JScrollPane.VERTICAL_SCROLLBAR_ALWAYS, JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
-//        jScrollPane.setBounds(POS_X, POS_Y + VERTICAL_DISTANCE, LIST_WIDTH, LIST_HEIGHT);
-        getJPanel().add(jList);
+        jTable = new JTable(defaultTableModel);
+        jTable.setBounds(POS_X, POS_Y + VERTICAL_DISTANCE, LIST_WIDTH, LIST_HEIGHT);
+        jScrollPane = new JScrollPane(jTable, JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED, JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
+        jScrollPane.setBounds(POS_X, POS_Y + VERTICAL_DISTANCE, LIST_WIDTH, LIST_HEIGHT);
+        jTable.setFillsViewportHeight(true);
+        getJPanel().add(jScrollPane);
     }
 
     private void populateTable() {
         try {
             List<TeamDto> teamDtos = teamController.getAllTeams();
             for (TeamDto teamDto : teamDtos) {
-                defaultListModel.addElement(teamDto.getTeamName());
+                defaultTableModel.addRow(new String[]{
+                        teamDto.getTeamName(),
+                        teamDto.getTeamActivity()
+                });
             }
         } catch (SQLException e) {
             System.out.println(e.getMessage());

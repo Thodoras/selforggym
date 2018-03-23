@@ -20,4 +20,5 @@ public class TeamDto {
     public void setTeamActivity(String teamActivity) {
         this.teamActivity = teamActivity;
     }
+
 }
