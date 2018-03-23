@@ -109,9 +109,9 @@ public class TeamForm extends Menu {
             TeamDto teamDto = new TeamDto();
             teamDto.setTeamName(teamNameField.getText());
             teamDto.setTeamActivity(teamActivityField.getText());
-            ManageTeamsMenu.getInstance().render("Team successfully added!");
             try {
                 teamController.addTeam(teamDto);
+                ManageTeamsMenu.getInstance().render("Team successfully added!");
             } catch (MissingFieldException e) {
                 errorMessage(e.getMessage());
             } catch (InvalidInputException e) {

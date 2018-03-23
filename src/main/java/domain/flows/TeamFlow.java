@@ -9,6 +9,7 @@ import utils.exceptions.InvalidInputException;
 import utils.exceptions.MissingFieldException;
 
 import java.sql.SQLException;
+import java.util.List;
 
 public class TeamFlow {
 
@@ -32,5 +33,10 @@ public class TeamFlow {
         teamValidator.validateTeamDto(teamDto);
         TeamDao teamDao = teamMapper.mapTeamDtoToTeamDao(teamDto);
         teamRepository.insert(teamDao);
+    }
+
+    public List<TeamDto> getAllTeams() throws SQLException {
+        List<TeamDao> teamDaos = teamRepository.getAll();
+        return teamMapper.mapListTeamDaoToListTeamDto(teamDaos);
     }
 }

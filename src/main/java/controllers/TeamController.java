@@ -6,6 +6,7 @@ import utils.exceptions.InvalidInputException;
 import utils.exceptions.MissingFieldException;
 
 import java.sql.SQLException;
+import java.util.List;
 
 public class TeamController {
 
@@ -25,6 +26,10 @@ public class TeamController {
             , InvalidInputException
             , SQLException {
         teamFlow.addTeam(teamDto);
+    }
+
+    public List<TeamDto> getAllTeams() throws SQLException {
+        return teamFlow.getAllTeams();
     }
 
 }

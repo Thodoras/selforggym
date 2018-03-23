@@ -1,8 +1,13 @@
 package uis.menus;
 
+import controllers.TeamController;
+import dtos.TeamDto;
+
 import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.sql.SQLException;
+import java.util.List;
 
 import static java.lang.Thread.sleep;
 
@@ -32,6 +37,7 @@ public class ManageTeamsMenu extends Menu {
     private DefaultListModel<String> defaultListModel = new DefaultListModel<>();
     private JList<String> jList;
     private JScrollPane jScrollPane;
+    private TeamController teamController = TeamController.getInstance();
 
     private ManageTeamsMenu() {
         initializeButtonListeners();
@@ -49,18 +55,19 @@ public class ManageTeamsMenu extends Menu {
     @Override
     public void render() {
         populatePanelIfNeeded();
+        populateTable();
         setPanelInFrame();
     }
 
     public void render(String message) {
-        messageLabel.setText(message);
-        messageLabel.setHorizontalAlignment(SwingConstants.CENTER);
-        messageLabel.setVerticalAlignment(SwingConstants.CENTER);
-        addMessage();
+        addMessage(message);
         render();
     }
 
-    private void addMessage() {
+    private void addMessage(String message) {
+        messageLabel.setText(message);
+        messageLabel.setHorizontalAlignment(SwingConstants.CENTER);
+        messageLabel.setVerticalAlignment(SwingConstants.CENTER);
         messageLabel.setBounds(getSystemResolutionWidth()/2 - MESSAGE_LABEL_WIDTH/2, MESSAGE_LABEL_HEIGHT, TITLE_WIDTH, TITLE_HEIGHT);
         getJPanel().add(messageLabel);
     }
@@ -87,13 +94,22 @@ public class ManageTeamsMenu extends Menu {
     }
 
     private void addTable() {
-        defaultListModel.addElement("foo");
-        defaultListModel.addElement("bar");
         jList = new JList<>(defaultListModel);
         jList.setBounds(POS_X, POS_Y + VERTICAL_DISTANCE, LIST_WIDTH, LIST_HEIGHT);
 //        jScrollPane = new JScrollPane(jList, JScrollPane.VERTICAL_SCROLLBAR_ALWAYS, JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
 //        jScrollPane.setBounds(POS_X, POS_Y + VERTICAL_DISTANCE, LIST_WIDTH, LIST_HEIGHT);
         getJPanel().add(jList);
+    }
+
+    private void populateTable() {
+        try {
+            List<TeamDto> teamDtos = teamController.getAllTeams();
+            for (TeamDto teamDto : teamDtos) {
+                defaultListModel.addElement(teamDto.getTeamName());
+            }
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+        }
     }
 
     private class ButtonListener implements ActionListener {

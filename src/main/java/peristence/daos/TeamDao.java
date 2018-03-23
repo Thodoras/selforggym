@@ -2,8 +2,6 @@ package peristence.daos;
 
 public class TeamDao {
 
-    private static final String tableName = "teams";
-
     private String teamName;
     private String teamActivity;
 
@@ -21,10 +19,6 @@ public class TeamDao {
 
     public void setTeamActivity(String teamActivity) {
         this.teamActivity = teamActivity;
-    }
-
-    public String getTableName() {
-        return tableName;
     }
 
 }
