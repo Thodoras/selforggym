@@ -2,13 +2,16 @@ package uis.menus;
 
 import controllers.TeamController;
 import dtos.TeamDto;
+import uis.menus.enums.TeamFormType;
 import utils.Constants;
+import utils.exceptions.InputAlreadyExistsException;
 import utils.exceptions.InvalidInputException;
 import utils.exceptions.MissingFieldException;
 
 import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.sql.SQLException;
 
 public class TeamForm extends Menu {
 
@@ -23,6 +26,8 @@ public class TeamForm extends Menu {
     private static final int FIELD_HEIGHT = getSystemResolutionHeight() / 24;
     private static final int ROW_HOR_DISTANCE = getSystemResolutionWidth() / 6;
     private static final int ROW_VER_DISTANCE = getSystemResolutionHeight() / 24;
+    private static final String ADD_TEAM_TITLE = "Add Team";
+    private static final String EDIT_TEAM_TITLE = "Edit Team";
 
     private JLabel teamNameLabel = new JLabel("Team Name:");
     private JLabel teamActivityLabel = new JLabel("Team Activity:");
@@ -30,6 +35,8 @@ public class TeamForm extends Menu {
     private JTextField teamActivityField = new JTextField();
     private JButton submitButton = new JButton("Submit");
     private JButton cancelButton = new JButton("Cancel");
+    private TeamFormType teamFormType;
+    private TeamDto oldDto;
 
     private TeamController teamController = TeamController.getInstance();
 
@@ -51,12 +58,45 @@ public class TeamForm extends Menu {
     public void render() {
         populatePanelIfNeeded();
         setPanelInFrame();
-
+        setTitle();
+        setFields();
     }
 
-    public void render(String title) {
-        getTitle().setText(title);
+    public void addRender() {
+        setTeamFormType(TeamFormType.ADD);
         render();
+    }
+
+    public void editRender(TeamDto teamDto) {
+        setTeamFormType(TeamFormType.EDIT);
+        setOldDto(teamDto);
+        render();
+    }
+
+    private void setTeamFormType(TeamFormType teamFormType) {
+        this.teamFormType = teamFormType;
+    }
+
+    private void setOldDto(TeamDto oldDto) {
+        this.oldDto = oldDto;
+    }
+
+    private void setTitle() {
+        if (teamFormType == TeamFormType.ADD) {
+            getTitle().setText(ADD_TEAM_TITLE);
+        } else {
+            getTitle().setText(EDIT_TEAM_TITLE);
+        }
+    }
+
+    private void setFields() {
+        if (teamFormType == TeamFormType.ADD) {
+            teamNameField.setText("");
+            teamActivityField.setText("");
+        } else {
+            teamNameField.setText(oldDto.getTeamName());
+            teamActivityField.setText(oldDto.getTeamActivity());
+        }
     }
 
     private void populatePanelIfNeeded() {
@@ -110,14 +150,28 @@ public class TeamForm extends Menu {
             teamDto.setTeamName(teamNameField.getText());
             teamDto.setTeamActivity(teamActivityField.getText());
             try {
-                teamController.addTeam(teamDto);
-                ManageTeamsMenu.getInstance().render("Team successfully added!");
+                submitStrategy(teamDto);
             } catch (MissingFieldException e) {
                 errorMessage(e.getMessage());
             } catch (InvalidInputException e) {
                 errorMessage(e.getMessage());
+            } catch (InputAlreadyExistsException e) {
+                errorMessage(e.getMessage());
             } catch (Exception e) {
                 errorMessage(Constants.GENERIC_ERROR_MESSAGE);
+            }
+        }
+
+        private void submitStrategy(TeamDto teamDto) throws MissingFieldException
+                , InvalidInputException
+                , InputAlreadyExistsException
+                , SQLException {
+            if (teamFormType == TeamFormType.ADD) {
+                teamController.addTeam(teamDto);
+                ManageTeamsMenu.getInstance().render("Team successfully added!");
+            } else {
+                teamController.updateTeam(oldDto, teamDto);
+                ManageTeamsMenu.getInstance().render("Team " + teamDto.getTeamName() + " successfully updated!");
             }
         }
 

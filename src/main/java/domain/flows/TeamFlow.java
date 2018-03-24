@@ -5,6 +5,7 @@ import domain.validators.TeamValidator;
 import dtos.TeamDto;
 import peristence.daos.TeamDao;
 import peristence.repositories.TeamRepository;
+import utils.exceptions.InputAlreadyExistsException;
 import utils.exceptions.InvalidInputException;
 import utils.exceptions.MissingFieldException;
 
@@ -29,6 +30,7 @@ public class TeamFlow {
 
     public void addTeam(TeamDto teamDto) throws MissingFieldException
             , InvalidInputException
+            , InputAlreadyExistsException
             , SQLException {
         teamValidator.validateTeamDto(teamDto);
         TeamDao teamDao = teamMapper.mapTeamDtoToTeamDao(teamDto);
@@ -38,5 +40,15 @@ public class TeamFlow {
     public List<TeamDto> getAllTeams() throws SQLException {
         List<TeamDao> teamDaos = teamRepository.getAll();
         return teamMapper.mapListTeamDaoToListTeamDto(teamDaos);
+    }
+
+    public void updateTeam(TeamDto oldDto, TeamDto newDto) throws MissingFieldException
+            , InvalidInputException
+            , InputAlreadyExistsException
+            , SQLException {
+        teamValidator.validateTeamDto(newDto);
+        TeamDao oldDao = teamMapper.mapTeamDtoToTeamDao(oldDto);
+        TeamDao newDao = teamMapper.mapTeamDtoToTeamDao(newDto);
+        teamRepository.update(oldDao, newDao);
     }
 }

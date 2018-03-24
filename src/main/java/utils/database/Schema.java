@@ -15,9 +15,10 @@ public class Schema {
         return INSTANCE;
     }
 
-    private String[] migrations = {"CREATE TABLE IF NOT EXISTS teams (" +
-            "team_name text PRIMARY KEY," +
-            "activity text);"
+    private String[] migrations = {"CREATE TABLE IF NOT EXISTS teams ("
+            + "id INTEGER PRIMARY KEY AUTOINCREMENT,"
+            + "team_name text,"
+            + "activity text);"
     };
 
     public void migrate() {

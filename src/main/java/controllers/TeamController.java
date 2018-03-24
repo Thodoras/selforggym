@@ -2,6 +2,7 @@ package controllers;
 
 import domain.flows.TeamFlow;
 import dtos.TeamDto;
+import utils.exceptions.InputAlreadyExistsException;
 import utils.exceptions.InvalidInputException;
 import utils.exceptions.MissingFieldException;
 
@@ -24,12 +25,20 @@ public class TeamController {
 
     public void addTeam(TeamDto teamDto) throws MissingFieldException
             , InvalidInputException
+            , InputAlreadyExistsException
             , SQLException {
         teamFlow.addTeam(teamDto);
     }
 
     public List<TeamDto> getAllTeams() throws SQLException {
         return teamFlow.getAllTeams();
+    }
+
+    public void updateTeam(TeamDto oldDto, TeamDto newDto) throws MissingFieldException
+            , InvalidInputException
+            , InputAlreadyExistsException
+            , SQLException {
+        teamFlow.updateTeam(oldDto, newDto);
     }
 
 }

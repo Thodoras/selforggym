@@ -2,8 +2,13 @@ package peristence.daos;
 
 public class TeamDao {
 
+    private int id;
     private String teamName;
     private String teamActivity;
+
+    public int getId() {
+        return id;
+    }
 
     public String getTeamName() {
         return teamName;

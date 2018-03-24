@@ -2,6 +2,8 @@ package uis.menus;
 
 import controllers.TeamController;
 import dtos.TeamDto;
+import peristence.daos.TeamDao;
+import uis.menus.enums.TeamFormType;
 
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
@@ -16,8 +18,6 @@ public class ManageTeamsMenu extends Menu {
 
     private static final ManageTeamsMenu INSTANCE = new ManageTeamsMenu();
     private static final String TITLE = "Manage Teams Menu";
-    private static final String ADD_TEAM_TITLE = "Add Team";
-    private static final String EDIT_TEAM_TITLE = "Edit Team";
     private static final int POS_X = getSystemResolutionWidth() / 6;
     private static final int POS_Y = getSystemResolutionHeight() / 12;
     private static final int BUTTON_WIDTH = getSystemResolutionWidth() / 6;
@@ -34,7 +34,7 @@ public class ManageTeamsMenu extends Menu {
     private JButton editButton = new JButton("Edit");
     private JButton deleteButton = new JButton("Delete");
     private JButton backButton = new JButton("Back");
-    private DefaultTableModel defaultTableModel = new DefaultTableModel(new Object[][]{}, new Object[]{"Team Name", "Activity"});
+    private DefaultTableModel defaultTableModel = new DefaultTableModel(new Object[][]{}, new Object[]{"Team Name", "Activity"});;
     private JTable jTable;
     private JScrollPane jScrollPane;
     private TeamController teamController = TeamController.getInstance();
@@ -50,6 +50,7 @@ public class ManageTeamsMenu extends Menu {
     private void initializeButtonListeners() {
         ButtonListener listener = new ButtonListener();
         addButton.addActionListener(listener);
+        editButton.addActionListener(listener);
     }
 
     @Override
@@ -103,7 +104,9 @@ public class ManageTeamsMenu extends Menu {
     }
 
     private void populateTable() {
+
         try {
+            defaultTableModel.setNumRows(0);
             List<TeamDto> teamDtos = teamController.getAllTeams();
             for (TeamDto teamDto : teamDtos) {
                 defaultTableModel.addRow(new String[]{
@@ -121,8 +124,19 @@ public class ManageTeamsMenu extends Menu {
         @Override
         public void actionPerformed(ActionEvent actionEvent) {
             if (actionEvent.getSource() == addButton) {
-                TeamForm.getInstance().render(ADD_TEAM_TITLE);
+                TeamForm.getInstance().addRender();
+            } else if (actionEvent.getSource() == editButton) {
+                if (jTable.getSelectedRow() != -1) {
+                    TeamForm.getInstance().editRender(setupDto());
+                }
             }
+        }
+
+        private TeamDto setupDto() {
+            TeamDto teamDto = new TeamDto();
+            teamDto.setTeamName((String) jTable.getValueAt(jTable.getSelectedRow(), 0));
+            teamDto.setTeamActivity((String) jTable.getValueAt(jTable.getSelectedRow(), 1));
+            return teamDto;
         }
     }
 }

@@ -29,6 +29,11 @@ public class TeamRepository {
         return mapInList(getFromDb(query));
     }
 
+    public List<TeamDao> getByName(String name) throws SQLException {
+        String query = "SELECT * FROM " + TEAM_TABLE + " WHERE " + TEAM_NAME_COL + " = '" + name + "';";
+        return mapInList(getFromDb(query));
+    }
+
     private ResultSet getFromDb(String query) throws SQLException {
         Statement statement = Connection.getInstance().getConnection().createStatement();
         return statement.executeQuery(query);
@@ -50,6 +55,15 @@ public class TeamRepository {
                 + "(" + TEAM_NAME_COL +", " + ACTIVITY_COL +") "
                 + "VALUES ('" + teamDao.getTeamName() + "'"
                 + ", '" + teamDao.getTeamActivity() + "');";
+        Statement statement = Connection.getInstance().getConnection().createStatement();
+        statement.executeUpdate(query);
+    }
+
+    public void update(TeamDao oldDao, TeamDao newDao) throws SQLException {
+        String query = "UPDATE " + TEAM_TABLE + " "
+                + "SET " + TEAM_NAME_COL + " = '" + newDao.getTeamName() + "', "
+                         + ACTIVITY_COL + " = '" + newDao.getTeamActivity() + "' "
+                + "WHERE " + TEAM_NAME_COL + " = '" + oldDao.getTeamName() + "';";
         Statement statement = Connection.getInstance().getConnection().createStatement();
         statement.executeUpdate(query);
     }
