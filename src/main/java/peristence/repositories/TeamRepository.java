@@ -26,15 +26,15 @@ public class TeamRepository {
 
     public List<TeamDao> getAll() throws SQLException {
         String query = "SELECT * FROM " + TEAM_TABLE + ";";
-        return mapInList(getFromDb(query));
+        return mapInList(readFromDb(query));
     }
 
     public List<TeamDao> getByName(String name) throws SQLException {
         String query = "SELECT * FROM " + TEAM_TABLE + " WHERE " + TEAM_NAME_COL + " = '" + name + "';";
-        return mapInList(getFromDb(query));
+        return mapInList(readFromDb(query));
     }
 
-    private ResultSet getFromDb(String query) throws SQLException {
+    private ResultSet readFromDb(String query) throws SQLException {
         Statement statement = Connection.getInstance().getConnection().createStatement();
         return statement.executeQuery(query);
     }
@@ -55,8 +55,7 @@ public class TeamRepository {
                 + "(" + TEAM_NAME_COL +", " + ACTIVITY_COL +") "
                 + "VALUES ('" + teamDao.getTeamName() + "'"
                 + ", '" + teamDao.getTeamActivity() + "');";
-        Statement statement = Connection.getInstance().getConnection().createStatement();
-        statement.executeUpdate(query);
+        writeToDb(query);
     }
 
     public void update(TeamDao oldDao, TeamDao newDao) throws SQLException {
@@ -64,6 +63,16 @@ public class TeamRepository {
                 + "SET " + TEAM_NAME_COL + " = '" + newDao.getTeamName() + "', "
                          + ACTIVITY_COL + " = '" + newDao.getTeamActivity() + "' "
                 + "WHERE " + TEAM_NAME_COL + " = '" + oldDao.getTeamName() + "';";
+        writeToDb(query);
+    }
+
+    public void delete(TeamDao teamDao) throws SQLException {
+        String query = "DELETE FROM " + TEAM_TABLE + " "
+                + "WHERE " + TEAM_NAME_COL + " = '" + teamDao.getTeamName() + "';";
+        writeToDb(query);
+    }
+
+    private void writeToDb(String query) throws SQLException {
         Statement statement = Connection.getInstance().getConnection().createStatement();
         statement.executeUpdate(query);
     }

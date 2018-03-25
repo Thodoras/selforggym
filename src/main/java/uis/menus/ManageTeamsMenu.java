@@ -3,7 +3,9 @@ package uis.menus;
 import controllers.TeamController;
 import dtos.TeamDto;
 import peristence.daos.TeamDao;
+import peristence.repositories.TeamRepository;
 import uis.menus.enums.TeamFormType;
+import utils.Constants;
 
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
@@ -51,6 +53,7 @@ public class ManageTeamsMenu extends Menu {
         ButtonListener listener = new ButtonListener();
         addButton.addActionListener(listener);
         editButton.addActionListener(listener);
+        deleteButton.addActionListener(listener);
     }
 
     @Override
@@ -121,13 +124,22 @@ public class ManageTeamsMenu extends Menu {
 
     private class ButtonListener implements ActionListener {
 
+        private static final String DELETE_ROW = "Row succssfully deleted";
+        private static final String WARNING = "Warning!";
+
         @Override
         public void actionPerformed(ActionEvent actionEvent) {
             if (actionEvent.getSource() == addButton) {
                 TeamForm.getInstance().addRender();
-            } else if (actionEvent.getSource() == editButton) {
+            }
+            if (actionEvent.getSource() == editButton) {
                 if (jTable.getSelectedRow() != -1) {
                     TeamForm.getInstance().editRender(setupDto());
+                }
+            }
+            if (actionEvent.getSource() == deleteButton) {
+                if (jTable.getSelectedRow() != -1) {
+                    deleteRow(setupDto());
                 }
             }
         }
@@ -137,6 +149,35 @@ public class ManageTeamsMenu extends Menu {
             teamDto.setTeamName((String) jTable.getValueAt(jTable.getSelectedRow(), 0));
             teamDto.setTeamActivity((String) jTable.getValueAt(jTable.getSelectedRow(), 1));
             return teamDto;
+        }
+
+        private void deleteRow(TeamDto teamDto) {
+
+            int reply = showMessage("Are you sure tou want to delete it?", JOptionPane.YES_NO_OPTION);
+            if (reply == JOptionPane.YES_OPTION) {
+                try {
+                    TeamController.getInstance().deleteTeam(teamDto);
+                    ManageTeamsMenu.getInstance().render("Row succssfully deleted");
+                } catch (SQLException e) {
+                    showMessage(Constants.GENERIC_ERROR_MESSAGE, JOptionPane.WARNING_MESSAGE);
+                }
+            }
+        }
+
+        private Integer showMessage(String message, int typeOfPane) {
+            if (typeOfPane == JOptionPane.YES_NO_OPTION) {
+                return JOptionPane.showConfirmDialog(getJFrame()
+                        , message
+                        , WARNING
+                        , typeOfPane);
+            }
+            if (typeOfPane == JOptionPane.WARNING_MESSAGE) {
+                JOptionPane.showMessageDialog(getJFrame()
+                        , message
+                        , WARNING
+                        , typeOfPane);
+            }
+            return -1;
         }
     }
 }

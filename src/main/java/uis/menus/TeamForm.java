@@ -37,7 +37,6 @@ public class TeamForm extends Menu {
     private JButton cancelButton = new JButton("Cancel");
     private TeamFormType teamFormType;
     private TeamDto oldDto;
-
     private TeamController teamController = TeamController.getInstance();
 
     private TeamForm() {

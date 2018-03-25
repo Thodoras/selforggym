@@ -51,4 +51,9 @@ public class TeamFlow {
         TeamDao newDao = teamMapper.mapTeamDtoToTeamDao(newDto);
         teamRepository.update(oldDao, newDao);
     }
+
+    public void deleteTeam(TeamDto teamDto) throws SQLException {
+        TeamDao teamDao = teamMapper.mapTeamDtoToTeamDao(teamDto);
+        teamRepository.delete(teamDao);
+    }
 }

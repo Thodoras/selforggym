@@ -41,4 +41,8 @@ public class TeamController {
         teamFlow.updateTeam(oldDto, newDto);
     }
 
+    public void deleteTeam(TeamDto teamDto) throws SQLException {
+        teamFlow.deleteTeam(teamDto);
+    }
+
 }
