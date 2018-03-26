@@ -1,5 +1,8 @@
 package uis.menus;
 
+import uis.menus.manageMenus.ManageMembersMenu;
+import uis.menus.manageMenus.ManageTeamsMenu;
+
 import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -29,6 +32,7 @@ public class ManageActivitiesMenu extends Menu {
     private void initializeButtonListeners() {
         ButtonListener listener = new ButtonListener();
         manageTeamsButton.addActionListener(listener);
+        manageMembersButton.addActionListener(listener);
     }
 
     @Override
@@ -62,6 +66,9 @@ public class ManageActivitiesMenu extends Menu {
         public void actionPerformed(ActionEvent actionEvent) {
             if (actionEvent.getSource() == manageTeamsButton) {
                 ManageTeamsMenu.getInstance().render();
+            }
+            if (actionEvent.getSource() == manageMembersButton) {
+                ManageMembersMenu.getInstance().render();
             }
         }
     }

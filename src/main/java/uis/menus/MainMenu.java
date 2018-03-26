@@ -14,7 +14,7 @@ public class MainMenu extends Menu {
     private static final int BUTTON_HEIGHT = getSystemResolutionHeight() / 8;
     private static final int BUTTON_DISTANCE = getSystemResolutionHeight() / 8;
 
-    private JButton manageActivitiesButton = new JButton("Manage Activities");
+    private JButton manageActivitiesButton = new JButton("Manage Staff");
     private JButton manageParticipationButton = new JButton("Manage Participation");
     private JButton manageEconomyButton = new JButton("Manage Payments");
     private JButton exitButton = new JButton("Exit");

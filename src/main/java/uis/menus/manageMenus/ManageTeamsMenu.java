@@ -1,10 +1,10 @@
-package uis.menus;
+package uis.menus.manageMenus;
 
 import controllers.TeamController;
 import dtos.TeamDto;
-import peristence.daos.TeamDao;
-import peristence.repositories.TeamRepository;
-import uis.menus.enums.TeamFormType;
+import uis.menus.ManageActivitiesMenu;
+import uis.menus.Menu;
+import uis.menus.TeamForm;
 import utils.Constants;
 
 import javax.swing.*;
@@ -16,32 +16,16 @@ import java.util.List;
 
 import static java.lang.Thread.sleep;
 
-public class ManageTeamsMenu extends Menu {
+public class ManageTeamsMenu extends ManageMenu {
 
     private static final ManageTeamsMenu INSTANCE = new ManageTeamsMenu();
     private static final String TITLE = "Manage Teams Menu";
-    private static final int POS_X = getSystemResolutionWidth() / 6;
-    private static final int POS_Y = getSystemResolutionHeight() / 12;
-    private static final int BUTTON_WIDTH = getSystemResolutionWidth() / 6;
-    private static final int BUTTON_HEIGHT = getSystemResolutionHeight() / 12;
-    private static final int LIST_WIDTH = 3*getSystemResolutionWidth() / 6;
-    private static final int LIST_HEIGHT = 8*getSystemResolutionHeight() / 12;
-    private static final int HORIZONTAL_DISTANCE = getSystemResolutionWidth() / 6;
-    private static final int VERTICAL_DISTANCE = getSystemResolutionHeight() / 12;
-    private static final int MESSAGE_LABEL_WIDTH = getSystemResolutionWidth() / 6;
-    private static final int MESSAGE_LABEL_HEIGHT = 2*getSystemResolutionHeight() / 24;
 
     private JLabel messageLabel = new JLabel();
-    private JButton addButton = new JButton("Add");
-    private JButton editButton = new JButton("Edit");
-    private JButton deleteButton = new JButton("Delete");
-    private JButton backButton = new JButton("Back");
-    private DefaultTableModel defaultTableModel = new DefaultTableModel(new Object[][]{}, new Object[]{"Team Name", "Activity"});;
-    private JTable jTable;
-    private JScrollPane jScrollPane;
     private TeamController teamController = TeamController.getInstance();
 
     private ManageTeamsMenu() {
+        defaultTableModel = new DefaultTableModel(new Object[][]{}, new Object[]{"Team Name", "Activity"});;
         initializeButtonListeners();
     }
 
@@ -51,10 +35,10 @@ public class ManageTeamsMenu extends Menu {
 
     private void initializeButtonListeners() {
         ButtonListener listener = new ButtonListener();
-        addButton.addActionListener(listener);
-        editButton.addActionListener(listener);
-        deleteButton.addActionListener(listener);
-        backButton.addActionListener(listener);
+        getAddButton().addActionListener(listener);
+        getEditButton().addActionListener(listener);
+        getDeleteButton().addActionListener(listener);
+        getBackButton().addActionListener(listener);
     }
 
     @Override
@@ -80,40 +64,21 @@ public class ManageTeamsMenu extends Menu {
     private void populatePanelIfNeeded() {
         if (getJPanel().getComponents().length == 0) {
             addTitle(TITLE);
-            addButton(addButton, POS_X + 3*HORIZONTAL_DISTANCE, POS_Y + 1*VERTICAL_DISTANCE);
-            addButton(editButton, POS_X + 3*HORIZONTAL_DISTANCE, POS_Y + 2*VERTICAL_DISTANCE);
-            addButton(deleteButton, POS_X + 3*HORIZONTAL_DISTANCE, POS_Y + 3*VERTICAL_DISTANCE);
-            addButton(backButton, POS_X + 3*HORIZONTAL_DISTANCE, POS_Y + 4*VERTICAL_DISTANCE);
+            addButton(getAddButton(), POS_X + 3*HORIZONTAL_DISTANCE, POS_Y + 1*VERTICAL_DISTANCE);
+            addButton(getEditButton(), POS_X + 3*HORIZONTAL_DISTANCE, POS_Y + 2*VERTICAL_DISTANCE);
+            addButton(getDeleteButton(), POS_X + 3*HORIZONTAL_DISTANCE, POS_Y + 3*VERTICAL_DISTANCE);
+            addButton(getBackButton(), POS_X + 3*HORIZONTAL_DISTANCE, POS_Y + 4*VERTICAL_DISTANCE);
             addTable();
         }
-    }
-
-    private void setPanelInFrame() {
-        getJFrame().setContentPane(getJPanel());
-        getJFrame().revalidate();
-    }
-
-    private void addButton(JButton button, int buttonPosX, int buttonPosY) {
-        button.setBounds(buttonPosX, buttonPosY, BUTTON_WIDTH, BUTTON_HEIGHT);
-        getJPanel().add(button);
-    }
-
-    private void addTable() {
-        jTable = new JTable(defaultTableModel);
-        jTable.setBounds(POS_X, POS_Y + VERTICAL_DISTANCE, LIST_WIDTH, LIST_HEIGHT);
-        jScrollPane = new JScrollPane(jTable, JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED, JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
-        jScrollPane.setBounds(POS_X, POS_Y + VERTICAL_DISTANCE, LIST_WIDTH, LIST_HEIGHT);
-        jTable.setFillsViewportHeight(true);
-        getJPanel().add(jScrollPane);
     }
 
     private void populateTable() {
 
         try {
-            defaultTableModel.setNumRows(0);
+            getDefaultTableModel().setNumRows(0);
             List<TeamDto> teamDtos = teamController.getAllTeams();
             for (TeamDto teamDto : teamDtos) {
-                defaultTableModel.addRow(new String[]{
+                getDefaultTableModel().addRow(new String[]{
                         teamDto.getTeamName(),
                         teamDto.getTeamActivity()
                 });
@@ -130,28 +95,28 @@ public class ManageTeamsMenu extends Menu {
 
         @Override
         public void actionPerformed(ActionEvent actionEvent) {
-            if (actionEvent.getSource() == addButton) {
+            if (actionEvent.getSource() == getAddButton()) {
                 TeamForm.getInstance().addRender();
             }
-            if (actionEvent.getSource() == editButton) {
-                if (jTable.getSelectedRow() != -1) {
+            if (actionEvent.getSource() == getEditButton()) {
+                if (getJTable().getSelectedRow() != -1) {
                     TeamForm.getInstance().editRender(setupDto());
                 }
             }
-            if (actionEvent.getSource() == deleteButton) {
-                if (jTable.getSelectedRow() != -1) {
+            if (actionEvent.getSource() == getDeleteButton()) {
+                if (getJTable().getSelectedRow() != -1) {
                     deleteRow(setupDto());
                 }
             }
-            if (actionEvent.getSource() == backButton) {
+            if (actionEvent.getSource() == getBackButton()) {
                 ManageActivitiesMenu.getInstance().render();
             }
         }
 
         private TeamDto setupDto() {
             TeamDto teamDto = new TeamDto();
-            teamDto.setTeamName((String) jTable.getValueAt(jTable.getSelectedRow(), 0));
-            teamDto.setTeamActivity((String) jTable.getValueAt(jTable.getSelectedRow(), 1));
+            teamDto.setTeamName((String) getJTable().getValueAt(getJTable().getSelectedRow(), 0));
+            teamDto.setTeamActivity((String) getJTable().getValueAt(getJTable().getSelectedRow(), 1));
             return teamDto;
         }
 
