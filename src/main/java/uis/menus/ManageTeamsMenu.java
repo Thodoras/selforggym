@@ -54,6 +54,7 @@ public class ManageTeamsMenu extends Menu {
         addButton.addActionListener(listener);
         editButton.addActionListener(listener);
         deleteButton.addActionListener(listener);
+        backButton.addActionListener(listener);
     }
 
     @Override
@@ -141,6 +142,9 @@ public class ManageTeamsMenu extends Menu {
                 if (jTable.getSelectedRow() != -1) {
                     deleteRow(setupDto());
                 }
+            }
+            if (actionEvent.getSource() == backButton) {
+                ManageActivitiesMenu.getInstance().render();
             }
         }
 
