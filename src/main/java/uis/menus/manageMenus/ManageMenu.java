@@ -4,6 +4,7 @@ import uis.menus.Menu;
 
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
+import java.awt.*;
 
 abstract public class ManageMenu extends Menu {
 
@@ -23,26 +24,27 @@ abstract public class ManageMenu extends Menu {
     private JButton deleteButton = new JButton("Delete");
     private JButton backButton = new JButton("Back");
     private JTable jTable;
-    protected DefaultTableModel defaultTableModel;
+    private DefaultTableModel defaultTableModel;
     private JScrollPane jScrollPane;
 
-    protected void setPanelInFrame() {
-        getJFrame().setContentPane(getJPanel());
-        getJFrame().revalidate();
+    protected void initializeTable(Object[] headers) {
+        jTable = new JTable(initializeTableModel(headers));
+    }
+
+    private DefaultTableModel initializeTableModel(Object[] headers) {
+        defaultTableModel = new DefaultTableModel(new Object[][]{}, headers);
+        return defaultTableModel;
     }
 
     protected void addButton(JButton button, int buttonPosX, int buttonPosY) {
-        button.setBounds(buttonPosX, buttonPosY, BUTTON_WIDTH, BUTTON_HEIGHT);
-        getJPanel().add(button);
+        getSwingTools().addButton(getJPanel()
+                , button
+                , new Rectangle(buttonPosX, buttonPosY, BUTTON_WIDTH, BUTTON_HEIGHT));
     }
 
     protected void addTable() {
-        jTable = new JTable(defaultTableModel);
-        jTable.setBounds(POS_X, POS_Y + VERTICAL_DISTANCE, TABLE_WIDTH, TABLE_HEIGHT);
-        jScrollPane = new JScrollPane(jTable, JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED, JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
-        jScrollPane.setBounds(POS_X, POS_Y + VERTICAL_DISTANCE, TABLE_WIDTH, TABLE_HEIGHT);
-        jTable.setFillsViewportHeight(true);
-        getJPanel().add(jScrollPane);
+        getSwingTools().addTable(getJTable(), getJPanel()
+                , new Rectangle(POS_X, POS_Y + VERTICAL_DISTANCE, TABLE_WIDTH, TABLE_HEIGHT));
     }
 
     protected JButton getAddButton() {

@@ -1,5 +1,6 @@
 package uis.menus;
 
+import uis.tools.SwingTools;
 import utils.Constants;
 import utils.SystemValues;
 
@@ -15,6 +16,7 @@ abstract public class Menu {
 
     private JPanel jPanel = new JPanel();
     private JLabel title = new JLabel();
+    private SwingTools swingTools = SwingTools.getInstance();
 
     protected Menu() {
         setupFrame();
@@ -41,6 +43,14 @@ abstract public class Menu {
 
     protected JLabel getTitle() {
         return title;
+    }
+
+    protected SwingTools getSwingTools() {
+        return swingTools;
+    }
+
+    protected void setPanelInFrame() {
+        getSwingTools().setPanelInFrame(getJFrame(), getJPanel());
     }
 
     protected void addTitle(String message) {

@@ -9,6 +9,7 @@ import utils.Constants;
 
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
+import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.sql.SQLException;
@@ -25,7 +26,7 @@ public class ManageTeamsMenu extends ManageMenu {
     private TeamController teamController = TeamController.getInstance();
 
     private ManageTeamsMenu() {
-        defaultTableModel = new DefaultTableModel(new Object[][]{}, new Object[]{"Team Name", "Activity"});;
+        initializeTable(new Object[]{"Team Name", "Activity"});
         initializeButtonListeners();
     }
 
@@ -57,8 +58,9 @@ public class ManageTeamsMenu extends ManageMenu {
         messageLabel.setText(message);
         messageLabel.setHorizontalAlignment(SwingConstants.CENTER);
         messageLabel.setVerticalAlignment(SwingConstants.CENTER);
-        messageLabel.setBounds(getSystemResolutionWidth()/2 - MESSAGE_LABEL_WIDTH/2, MESSAGE_LABEL_HEIGHT, TITLE_WIDTH, TITLE_HEIGHT);
-        getJPanel().add(messageLabel);
+        getSwingTools().addLabel(getJPanel()
+                , messageLabel
+                , new Rectangle(getSystemResolutionWidth()/2 - MESSAGE_LABEL_WIDTH/2, MESSAGE_LABEL_HEIGHT, TITLE_WIDTH, TITLE_HEIGHT));
     }
 
     private void populatePanelIfNeeded() {

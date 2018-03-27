@@ -4,6 +4,7 @@ import uis.menus.manageMenus.ManageMembersMenu;
 import uis.menus.manageMenus.ManageTeamsMenu;
 
 import javax.swing.*;
+import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
@@ -50,14 +51,10 @@ public class ManageActivitiesMenu extends Menu {
         }
     }
 
-    private void setPanelInFrame() {
-        getJFrame().setContentPane(getJPanel());
-        getJFrame().revalidate();
-    }
-
     private void addButton(JButton button, int buttonPosX, int buttonPosY) {
-        button.setBounds(buttonPosX, buttonPosY, BUTTON_WIDTH, BUTTON_HEIGHT);
-        getJPanel().add(button);
+        getSwingTools().addButton(getJPanel()
+                , button
+                , new Rectangle(buttonPosX, buttonPosY, BUTTON_WIDTH, BUTTON_HEIGHT));
     }
 
     private class ButtonListener implements ActionListener {

@@ -10,6 +10,7 @@ import utils.exceptions.InvalidInputException;
 import utils.exceptions.MissingFieldException;
 
 import javax.swing.*;
+import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.sql.SQLException;
@@ -109,11 +110,6 @@ public class TeamForm extends Menu {
         }
     }
 
-    private void setPanelInFrame() {
-        getJFrame().setContentPane(getJPanel());
-        getJFrame().revalidate();
-    }
-
     private void addRow(JLabel jLabel, JTextField jTextField, int posX , int posY) {
         addLabel(jLabel, posX, posY);
         addField(jTextField, posX + ROW_HOR_DISTANCE, posY);
@@ -130,8 +126,9 @@ public class TeamForm extends Menu {
     }
 
     private void addButton(JButton button, int buttonPosX, int buttonPosY) {
-        button.setBounds(buttonPosX, buttonPosY, BUTTON_WIDTH, BUTTON_HEIGHT);
-        getJPanel().add(button);
+        getSwingTools().addButton(getJPanel()
+                , button
+                , new Rectangle(buttonPosX, buttonPosY, BUTTON_WIDTH, BUTTON_HEIGHT));
     }
 
     private class ButtonListener implements ActionListener {

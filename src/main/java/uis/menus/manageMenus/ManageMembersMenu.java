@@ -11,7 +11,7 @@ public class ManageMembersMenu extends ManageMenu {
     private static final String TITLE = "Manage Members Menu";
 
     private ManageMembersMenu() {
-        defaultTableModel = new DefaultTableModel(new Object[][]{}, new Object[]{"Member Name"});;
+        initializeTable(new Object[]{"Member Name"});
     }
 
     public static ManageMembersMenu getInstance() {

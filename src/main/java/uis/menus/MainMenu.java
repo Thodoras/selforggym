@@ -1,6 +1,9 @@
 package uis.menus;
 
+import uis.tools.SwingTools;
+
 import javax.swing.*;
+import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
@@ -49,13 +52,9 @@ public class MainMenu extends Menu {
     }
 
     private void addButton(JButton button, int buttonPosX, int buttonPosY) {
-        button.setBounds(buttonPosX, buttonPosY, BUTTON_WIDTH, BUTTON_HEIGHT);
-        getJPanel().add(button);
-    }
-
-    private void setPanelInFrame() {
-        getJFrame().setContentPane(getJPanel());
-        getJFrame().revalidate();
+        getSwingTools().addButton(getJPanel()
+                , button
+                , new Rectangle(buttonPosX, buttonPosY, BUTTON_WIDTH, BUTTON_HEIGHT));
     }
 
     private class ButtonListener implements ActionListener {
